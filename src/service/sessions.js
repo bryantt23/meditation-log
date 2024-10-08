@@ -30,9 +30,18 @@ export const addSession = async (description, length) => {
             const durationInMilliseconds = durationInSeconds * 1000;
 
             postBody.youTubeTitle = youTubeTitle
-            postBody.youTubeDuration = durationInMilliseconds
+            postBody.length = durationInMilliseconds
         }
 
+        await axios.post(`${BASE_URL}/sessions`, postBody)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export const copySession = async (description, youTubeTitle, length) => {
+    try {
+        let postBody = { description, youTubeTitle, length, finishTime: Date.now() }
         await axios.post(`${BASE_URL}/sessions`, postBody)
     } catch (error) {
         console.error(error)

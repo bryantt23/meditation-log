@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getSessions, addSession } from '../service/sessions'
+import { getSessions, addSession, copySession } from '../service/sessions'
 import MeditationForm from './MeditationForm'
 
 function MeditationSessions() {
@@ -24,6 +24,15 @@ function MeditationSessions() {
         }
     }
 
+    const copyMeditationSession = async (description, youTubeTitle, length) => {
+        try {
+            await copySession(description, youTubeTitle, length)
+            fetchData()
+        } catch (error) {
+            console.error("Error adding session:", error)
+        }
+    }
+
     return (
         <div>
             <h1>Meditation Sessions</h1>
@@ -37,16 +46,18 @@ function MeditationSessions() {
                             <th>YouTube Title</th>
                             <th>Finish Time</th>
                             <th>Length</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         {sessions.map(session => {
-                            const { id, description, finishTime, youTubeTitle, youTubeDuration } = session
+                            const { id, description, finishTime, youTubeTitle, length } = session
                             return (<tr key={id}>
                                 <td>{description}</td>
                                 <td>{youTubeTitle}</td>
                                 <td>{finishTime}</td>
-                                <td>{youTubeDuration}</td>
+                                <td>{length}</td>
+                                <td><button onClick={() => copyMeditationSession(description, youTubeTitle, length)}>Copy Session</button></td>
                             </tr>)
                         }
                         )}
