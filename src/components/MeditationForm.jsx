@@ -1,20 +1,12 @@
 import React, { useState } from 'react'
-import { addSession } from '../service/sessions'
 
-function MeditationForm() {
+function MeditationForm({ handleAddSession }) {
     const [description, setDescription] = useState("")
-    const [length, setLength] = useState()
-
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        const res = await addSession(description, length)
-        console.log("🚀 ~ handleSubmit ~ res:", res)
-
-    }
+    const [length, setLength] = useState("")
 
     return (
         <div>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={(e) => handleAddSession(e, description, length)}>
                 <label htmlFor='description'>Description</label>
                 <input
                     type="text"
