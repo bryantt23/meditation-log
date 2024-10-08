@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getSessions } from '../service/sessions'
+import MeditationForm from './MeditationForm'
 
 function MeditationSessions() {
     const [sessions, setSessions] = useState([])
@@ -16,20 +17,23 @@ function MeditationSessions() {
         <div>
             <h1>Meditation Sessions</h1>
             <div>
+                <MeditationForm />
 
-                <table>
+                <table border="1">
                     <thead>
-                        <th>Description</th>
-                        <th>YouTube Title</th>
-                        <th>Finish Time</th>
-                        <th>Length</th>
+                        <tr>
+                            <th>Description</th>
+                            <th>YouTube Title</th>
+                            <th>Finish Time</th>
+                            <th>Length</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {sessions.map(session => {
-                            const { _id, description, finishTime, youtubeTitle, length } = session
-                            return (<tr key={_id}>
+                            const { id, description, finishTime, youTubeTitle, length } = session
+                            return (<tr key={id}>
                                 <td>{description}</td>
-                                <td>{youtubeTitle}</td>
+                                <td>{youTubeTitle}</td>
                                 <td>{finishTime}</td>
                                 <td>{length}</td>
                             </tr>)
