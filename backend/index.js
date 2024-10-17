@@ -1,13 +1,25 @@
 const fs = require('fs')
 const path = require('path')
 const axios = require('axios')
+const iso8601Duration = require('iso8601-duration')
 const filePath = path.join(__dirname, 'meditations.txt')
-
 const basicCache = {}
 
 const generateRandomId = () => {
     return Math.random().toString(36).substr(2, 9); // Generates a random alphanumeric string
 };
+
+// Function to convert ISO 8601 duration into seconds
+function convertDurationToSeconds(isoDuration) {
+    const parsedDuration = iso8601Duration.parse(isoDuration);
+
+    // Convert to seconds
+    const hoursInSeconds = (parsedDuration.hours || 0) * 60 * 60;
+    const minutesInSeconds = (parsedDuration.minutes || 0) * 60;
+    const seconds = parsedDuration.seconds || 0;
+
+    return hoursInSeconds + minutesInSeconds + seconds;
+}
 
 async function getYouTubeInfo(url) {
     const videoId = extractVideoIdFromUrl(url)
@@ -20,7 +32,8 @@ async function getYouTubeInfo(url) {
         if (response.data.items && response.data.items.length > 0) {
             const videoInfo = response.data.items[0]
             const description = videoInfo.snippet.title;
-            const length = videoInfo.contentDetails.duration;
+            const isoDuration = videoInfo.contentDetails.duration;
+            const length = convertDurationToSeconds(isoDuration)
             basicCache[youTubeUrl] = { description, length }
             return { description, length }
         }
@@ -63,23 +76,20 @@ fs.readFile(filePath, 'utf8', async (error, data) => {
                 finishTime = dateTime
             }
             else {
-                const isYouTubeUrl = line.includes("youtube")
+                const isYouTubeUrl = line.includes("youtu")
                 let result = { id: generateRandomId() }
                 if (isYouTubeUrl) {
                     const youtubeInfo = await getYouTubeInfo(line)
-                    // TODO destructure to get length & description
                     result = { ...result, youTubeUrl: line, finishTime, ...youtubeInfo }
                 }
                 else {
-
+                    const [lengthString, description = 'unknown'] = line.split(", ")
+                    const length = Number(lengthString.split(" ")[0]) * 60
+                    result = { ...result, length, description, finishTime }
                 }
                 res.push(result)
             }
-
-
         }
         console.log("🚀 ~ fs.readFile ~ res:", JSON.stringify(res, null, 4), Object.keys(res).length, Object.values(res).length)
-
     }
-
 })
