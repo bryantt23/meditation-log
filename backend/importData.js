@@ -4,7 +4,6 @@ const fs = require('fs'); // For reading the JSON file
 
 // Define a Mongoose schema for the meditations
 const meditationSchema = new mongoose.Schema({
-    id: String,
     youTubeUrl: String,
     finishTime: Number,
     description: String,

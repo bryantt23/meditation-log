@@ -24,9 +24,9 @@ function MeditationSessions() {
         }
     }
 
-    const copyMeditationSession = async (description, youTubeTitle, length) => {
+    const copyMeditationSession = async (description, youTubeUrl, length) => {
         try {
-            await copySession(description, youTubeTitle, length)
+            await copySession(description, youTubeUrl, length)
             fetchData()
         } catch (error) {
             console.error("Error adding session:", error)
@@ -43,7 +43,7 @@ function MeditationSessions() {
                     <thead>
                         <tr>
                             <th>Description</th>
-                            <th>YouTube Title</th>
+                            <th>YouTube URL</th>
                             <th>Finish Time</th>
                             <th>Length</th>
                             <th></th>
@@ -51,13 +51,13 @@ function MeditationSessions() {
                     </thead>
                     <tbody>
                         {sessions.map(session => {
-                            const { id, description, finishTime, youTubeTitle, length } = session
+                            const { id, description, finishTime, youTubeUrl, length } = session
                             return (<tr key={id}>
                                 <td>{description}</td>
-                                <td>{youTubeTitle}</td>
+                                <td>{youTubeUrl}</td>
                                 <td>{finishTime}</td>
                                 <td>{length}</td>
-                                <td><button onClick={() => copyMeditationSession(description, youTubeTitle, length)}>Copy Session</button></td>
+                                <td><button onClick={() => copyMeditationSession(description, youTubeUrl, length)}>Copy Session</button></td>
                             </tr>)
                         }
                         )}

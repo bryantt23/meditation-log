@@ -1,11 +1,11 @@
 import axios from 'axios'
 import iso8601Duration from 'iso8601-duration'
 
-const BASE_URL = 'http://localhost:5000'
+const BASE_URL = 'http://localhost:3000'
 
 export const getSessions = async () => {
     try {
-        const sessions = await axios.get(`${BASE_URL}/sessions`)
+        const sessions = await axios.get(`${BASE_URL}/meditations`)
         return sessions.data.sort((a, b) => b.finishTime - a.finishTime)
     } catch (error) {
         console.error(error)
