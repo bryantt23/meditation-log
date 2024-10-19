@@ -20,15 +20,25 @@ export const addSession = async (description, length) => {
             const videoId = description.split("v=")[1]
             const youTubeApiUrl = `https://www.googleapis.com/youtube/v3/videos?id=${videoId}&key=AIzaSyBRrQmXEXUOOYkXW_sa7Gd5dGJJkEbiT_Q&part=snippet,contentDetails`
             const response = await axios.get(youTubeApiUrl)
-            const youTubeTitle = response.data.items[0].snippet.title
-            const youTubeDurationISO = response.data.items[0].contentDetails.duration
+            const videoDetails = response.data.items[0];
+
+            const youTubeTitle = videoDetails.snippet.title
+            const youTubeDurationISO = videoDetails.contentDetails.duration
+            const thumbnailUrl = videoDetails.snippet.thumbnails.default.url
+
             const durationParsed = iso8601Duration.parse(youTubeDurationISO)
             const durationInSeconds =
                 (durationParsed.hours || 0) * 3600 +  // Convert hours to seconds
                 (durationParsed.minutes || 0) * 60 +  // Convert minutes to seconds
                 (durationParsed.seconds || 0);        // Seconds 
 
-            postBody = { ...postBody, description: youTubeTitle, length: durationInSeconds, youTubeUrl: description }
+            postBody = {
+                ...postBody,
+                description: youTubeTitle,
+                length: durationInSeconds,
+                youTubeUrl: description,
+                thumbnailUrl
+            }
         }
 
         await axios.post(`${BASE_URL}/meditations`, postBody)

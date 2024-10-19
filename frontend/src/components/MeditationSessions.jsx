@@ -59,7 +59,7 @@ function MeditationSessions() {
                     </thead>
                     <tbody>
                         {sessions.map(session => {
-                            const { id, description, finishTime, youTubeUrl, length } = session
+                            const { id, description, finishTime, youTubeUrl, length, thumbnailUrl } = session
                             const date = new Date(finishTime)
 
                             // Specify options for the date
@@ -76,7 +76,10 @@ function MeditationSessions() {
                             };
                             return (<tr key={id}>
                                 <td>{description}</td>
-                                <td>{youTubeUrl && <a href={`${youTubeUrl}`} target='_blank'>Link</a>}</td>
+                                <td>{youTubeUrl &&
+                                    <a href={`${youTubeUrl}`} target='_blank'>
+                                        <img src={thumbnailUrl} />
+                                    </a>}</td>
                                 <td>{`${date.toDateString('en-US', dateOptions)} ${date.toLocaleTimeString('en-US', timeOptions)}`}</td>
                                 <td>{getFormattedLength(length)}</td>
                                 <td><button onClick={() => copyMeditationSession(description, youTubeUrl, length)}>Copy Session</button></td>
