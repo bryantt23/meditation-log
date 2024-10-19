@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { getSessions, addSession, copySession } from '../service/sessions'
 import MeditationForm from './MeditationForm'
 
 function MeditationSessions() {
     const [sessions, setSessions] = useState([])
+    const topRef = useRef(null)
 
     const fetchData = async () => {
         const data = await getSessions()
@@ -41,9 +42,13 @@ function MeditationSessions() {
         return `${minutesString} ${secondsString}`
     }
 
+    const scrollToRef = () => {
+        topRef.current.scrollIntoView({ behavior: "smooth", block: 'start' })
+    }
+
     return (
         <div>
-            <h1>Meditation Sessions</h1>
+            <h1 ref={topRef}>Meditation Sessions</h1>
             <div>
                 <MeditationForm handleAddSession={handleAddSession} />
 
@@ -82,7 +87,10 @@ function MeditationSessions() {
                                     </a>}</td>
                                 <td>{`${date.toDateString('en-US', dateOptions)} ${date.toLocaleTimeString('en-US', timeOptions)}`}</td>
                                 <td>{getFormattedLength(length)}</td>
-                                <td><button onClick={() => copyMeditationSession(description, youTubeUrl, length)}>Copy Session</button></td>
+                                <td><button onClick={() => {
+                                    copyMeditationSession(description, youTubeUrl, length)
+                                    scrollToRef()
+                                }}>Copy Session</button></td>
                             </tr>)
                         }
                         )}
