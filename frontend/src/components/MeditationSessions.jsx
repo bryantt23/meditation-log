@@ -33,6 +33,14 @@ function MeditationSessions() {
         }
     }
 
+    const getFormattedLength = (time) => {
+        const minutes = Math.floor(time / 60);
+        const minutesString = minutes === 0 ? '' : `${minutes} minute${minutes === 1 ? "" : "s"}`
+        const seconds = time % 60
+        const secondsString = seconds === 0 ? '' : `${seconds} second${seconds === 1 ? "" : "s"}`
+        return `${minutesString} ${secondsString}`
+    }
+
     return (
         <div>
             <h1>Meditation Sessions</h1>
@@ -52,11 +60,25 @@ function MeditationSessions() {
                     <tbody>
                         {sessions.map(session => {
                             const { id, description, finishTime, youTubeUrl, length } = session
+                            const date = new Date(finishTime)
+
+                            // Specify options for the date
+                            const dateOptions = {
+                                month: 'long', // Full name of the month
+                                day: 'numeric' // Numeric day
+                            };
+
+                            // Specify options for the time
+                            const timeOptions = {
+                                hour: 'numeric',   // Numeric hour
+                                minute: '2-digit', // Two digit minute
+                                hour12: true       // 12-hour time with AM/PM
+                            };
                             return (<tr key={id}>
                                 <td>{description}</td>
-                                <td>{youTubeUrl}</td>
-                                <td>{finishTime}</td>
-                                <td>{length}</td>
+                                <td>{youTubeUrl && <a href={`${youTubeUrl}`} target='_blank'>Link</a>}</td>
+                                <td>{`${date.toDateString('en-US', dateOptions)} ${date.toLocaleTimeString('en-US', timeOptions)}`}</td>
+                                <td>{getFormattedLength(length)}</td>
                                 <td><button onClick={() => copyMeditationSession(description, youTubeUrl, length)}>Copy Session</button></td>
                             </tr>)
                         }
