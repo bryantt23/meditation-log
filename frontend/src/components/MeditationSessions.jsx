@@ -1,10 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react'
 import { getSessions, addSession, copySession } from '../service/sessions'
 import MeditationForm from './MeditationForm'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 function MeditationSessions() {
     const [sessions, setSessions] = useState([])
     const topRef = useRef(null)
+    const notify = (message) => toast(message)
 
     const fetchData = async () => {
         const data = await getSessions()
@@ -20,6 +23,7 @@ function MeditationSessions() {
         try {
             await addSession(description, length * 60)
             fetchData()
+            notify('Added session')
         } catch (error) {
             console.error("Error adding session:", error)
         }
@@ -28,6 +32,7 @@ function MeditationSessions() {
     const copyMeditationSession = async (description, youTubeUrl, length) => {
         try {
             await copySession(description, youTubeUrl, length)
+            notify('Copied session')
             fetchData()
         } catch (error) {
             console.error("Error adding session:", error)
@@ -48,6 +53,7 @@ function MeditationSessions() {
 
     return (
         <div>
+            <ToastContainer />
             <h1 ref={topRef}>Meditation Sessions</h1>
             <div>
                 <MeditationForm handleAddSession={handleAddSession} />
