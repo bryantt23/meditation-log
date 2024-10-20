@@ -1,8 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { getSessions, addSession, copySession } from '../service/sessions'
+import { getSessions, addSession, copySession, toggleSession } from '../service/sessions'
 import MeditationForm from './MeditationForm'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faStar as fasFaStar } from '@fortawesome/free-solid-svg-icons';
+import { faStar as farFaStar } from '@fortawesome/free-regular-svg-icons';
 
 function MeditationSessions() {
     const [sessions, setSessions] = useState([])
@@ -39,6 +42,15 @@ function MeditationSessions() {
         }
     }
 
+    const toggleFavoriteSession = async (id) => {
+        try {
+            await toggleSession(id)
+            fetchData()
+        } catch (error) {
+            console.error("Error toggling session:", error)
+        }
+    }
+
     const getFormattedLength = (time) => {
         const minutes = Math.floor(time / 60);
         const minutesString = minutes === 0 ? '' : `${minutes} minute${minutes === 1 ? "" : "s"}`
@@ -61,6 +73,7 @@ function MeditationSessions() {
                 <table border="1">
                     <thead>
                         <tr>
+                            <th></th>
                             <th>Description</th>
                             <th>YouTube URL</th>
                             <th>Finish Time</th>
@@ -70,7 +83,7 @@ function MeditationSessions() {
                     </thead>
                     <tbody>
                         {sessions.map(session => {
-                            const { id, description, finishTime, youTubeUrl, length, thumbnailUrl } = session
+                            const { _id, description, finishTime, youTubeUrl, length, thumbnailUrl, isFavorite } = session
                             const date = new Date(finishTime)
 
                             // Specify options for the date
@@ -85,7 +98,13 @@ function MeditationSessions() {
                                 minute: '2-digit', // Two digit minute
                                 hour12: true       // 12-hour time with AM/PM
                             };
-                            return (<tr key={id}>
+                            return (<tr key={_id}>
+                                <td>
+                                    <FontAwesomeIcon
+                                        icon={isFavorite ? fasFaStar : farFaStar}
+                                        onClick={() => toggleFavoriteSession(_id)}
+                                    />
+                                </td>
                                 <td>{description}</td>
                                 <td>{youTubeUrl &&
                                     <a href={`${youTubeUrl}`} target='_blank'>

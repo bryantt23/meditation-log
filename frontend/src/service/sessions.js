@@ -55,3 +55,13 @@ export const copySession = async (description, youTubeUrl, length) => {
         console.error(error)
     }
 }
+
+export const toggleSession = async (id) => {
+    try {
+        const response = await axios.put(`${BASE_URL}/meditations/${id}/toggleFavorite`)
+        return response.data
+    } catch (error) {
+        console.error("Error toggling session:", error);
+        throw error
+    }
+}
