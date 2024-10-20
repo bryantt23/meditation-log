@@ -18,7 +18,7 @@ function MeditationSessions() {
     const handleAddSession = async (e, description, length) => {
         e.preventDefault()
         try {
-            await addSession(description, length)
+            await addSession(description, length * 60)
             fetchData()
         } catch (error) {
             console.error("Error adding session:", error)

@@ -17,7 +17,7 @@ function MeditationForm({ handleAddSession }) {
                 <label htmlFor='length'>Length</label>
                 <input
                     type="number"
-                    placeholder='Seconds'
+                    placeholder='Minutes'
                     value={length}
                     name="length"
                     onChange={e => setLength(e.target.value)}
