@@ -10,7 +10,7 @@ import { faStar as farFaStar } from '@fortawesome/free-regular-svg-icons';
 function MeditationSessions() {
     const [sessions, setSessions] = useState([])
     const [sessionsDisplay, setSessionsDisplay] = useState([])
-    const [showOnlyFavorites, setShowOnlyFavorites] = useState(false)
+    const [showOnlyFavorites, setShowOnlyFavorites] = useState(() => JSON.parse(localStorage.getItem('showOnlyFavorites')) || false)
     const topRef = useRef(null)
     const notify = (message) => toast(message)
 
@@ -30,7 +30,7 @@ function MeditationSessions() {
         else {
             setSessionsDisplay(sessions)
         }
-
+        localStorage.setItem('showOnlyFavorites', JSON.stringify(showOnlyFavorites))
     }, [sessions, showOnlyFavorites])
 
     const handleAddSession = async (e, description, length) => {
