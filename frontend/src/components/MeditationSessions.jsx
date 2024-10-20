@@ -9,6 +9,8 @@ import { faStar as farFaStar } from '@fortawesome/free-regular-svg-icons';
 
 function MeditationSessions() {
     const [sessions, setSessions] = useState([])
+    const [sessionsDisplay, setSessionsDisplay] = useState([])
+    const [showOnlyFavorites, setShowOnlyFavorites] = useState(false)
     const topRef = useRef(null)
     const notify = (message) => toast(message)
 
@@ -20,6 +22,16 @@ function MeditationSessions() {
     useEffect(() => {
         fetchData()
     }, [])
+
+    useEffect(() => {
+        if (showOnlyFavorites) {
+            setSessionsDisplay(sessions.filter(session => session.isFavorite))
+        }
+        else {
+            setSessionsDisplay(sessions)
+        }
+
+    }, [sessions, showOnlyFavorites])
 
     const handleAddSession = async (e, description, length) => {
         e.preventDefault()
@@ -69,6 +81,14 @@ function MeditationSessions() {
             <h1 ref={topRef}>Meditation Sessions</h1>
             <div>
                 <MeditationForm handleAddSession={handleAddSession} />
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={showOnlyFavorites}
+                        onChange={() => setShowOnlyFavorites(cur => !cur)}
+                    />
+                    Show Only Favorites
+                </label>
 
                 <table border="1">
                     <thead>
@@ -82,7 +102,7 @@ function MeditationSessions() {
                         </tr>
                     </thead>
                     <tbody>
-                        {sessions.map(session => {
+                        {sessionsDisplay.map(session => {
                             const { _id, description, finishTime, youTubeUrl, length, thumbnailUrl, isFavorite } = session
                             const date = new Date(finishTime)
 
