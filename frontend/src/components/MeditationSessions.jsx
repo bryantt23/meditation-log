@@ -44,9 +44,9 @@ function MeditationSessions() {
         }
     }
 
-    const copyMeditationSession = async (description, youTubeUrl, length) => {
+    const copyMeditationSession = async (description, youTubeUrl, length, thumbnailUrl) => {
         try {
-            await copySession(description, youTubeUrl, length)
+            await copySession(description, youTubeUrl, length, thumbnailUrl)
             notify('Copied session')
             fetchData()
         } catch (error) {
@@ -133,7 +133,7 @@ function MeditationSessions() {
                                 <td>{`${date.toDateString('en-US', dateOptions)} ${date.toLocaleTimeString('en-US', timeOptions)}`}</td>
                                 <td>{getFormattedLength(length)}</td>
                                 <td><button onClick={() => {
-                                    copyMeditationSession(description, youTubeUrl, length)
+                                    copyMeditationSession(description, youTubeUrl, length, thumbnailUrl)
                                     scrollToRef()
                                 }}>Copy Session</button></td>
                             </tr>)

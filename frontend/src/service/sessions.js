@@ -47,9 +47,9 @@ export const addSession = async (description, length) => {
     }
 }
 
-export const copySession = async (description, youTubeUrl, length) => {
+export const copySession = async (description, youTubeUrl, length, thumbnailUrl) => {
     try {
-        let postBody = { description, youTubeUrl, length, finishTime: Date.now() }
+        let postBody = { description, youTubeUrl, length, finishTime: Date.now(), thumbnailUrl }
         await axios.post(`${BASE_URL}/meditations`, postBody)
     } catch (error) {
         console.error(error)
