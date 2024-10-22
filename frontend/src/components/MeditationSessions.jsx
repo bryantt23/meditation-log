@@ -78,19 +78,21 @@ function MeditationSessions() {
     return (
         <div>
             <ToastContainer />
-            <h1 ref={topRef}>Meditation Sessions</h1>
+            <h1 className="meditation-title" ref={topRef}>Meditation Sessions</h1>
             <div>
                 <MeditationForm handleAddSession={handleAddSession} />
-                <label>
-                    <input
-                        type="checkbox"
-                        checked={showOnlyFavorites}
-                        onChange={() => setShowOnlyFavorites(cur => !cur)}
-                    />
-                    Show Only Favorites
-                </label>
+                <div className='favorites-section'>
+                    <label>
+                        <input
+                            type="checkbox"
+                            checked={showOnlyFavorites}
+                            onChange={() => setShowOnlyFavorites(cur => !cur)}
+                        />
+                        Show Only Favorites
+                    </label>
+                </div>
 
-                <table border="1">
+                <table className="meditation-table" border="1">
                     <thead>
                         <tr>
                             <th></th>
@@ -141,8 +143,6 @@ function MeditationSessions() {
                         )}
                     </tbody>
                 </table>
-
-
             </div>
         </div>
     )
