@@ -64,16 +64,13 @@ app.put('/meditations/:id/toggleFavorite', async (req, res) => {
 })
 
 app.delete('/meditations/:id', async (req, res) => {
-    console.log("🚀 ~ app.delete ~ req:", req)
     try {
-        const session = await Meditation.findById(req.params.id)
-        if (!session) {
+        const deletedSession = await Meditation.findByIdAndDelete(req.params.id)
+        if (!deletedSession) {
             return res.status(404).send('Session not found')
         }
-        await session.deleteOne()
 
-        //TODO look up
-        res.json("Deleted")
+        res.json({ message: "Session deleted successfully" })
     } catch (error) {
         console.error('Error deleting session:', error);
         res.status(500).send('Error deleting session')
