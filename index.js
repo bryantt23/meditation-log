@@ -63,6 +63,23 @@ app.put('/meditations/:id/toggleFavorite', async (req, res) => {
     }
 })
 
+app.delete('/meditations/:id', async (req, res) => {
+    console.log("🚀 ~ app.delete ~ req:", req)
+    try {
+        const session = await Meditation.findById(req.params.id)
+        if (!session) {
+            return res.status(404).send('Session not found')
+        }
+        await session.deleteOne()
+
+        //TODO look up
+        res.json("Deleted")
+    } catch (error) {
+        console.error('Error deleting session:', error);
+        res.status(500).send('Error deleting session')
+    }
+})
+
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 })
